@@ -179,7 +179,7 @@ if __name__ == '__main__':
     time.sleep(2)
 
     BFIF.check()
-    print("RxDoC card status: Voltage=%5.2f V, Current=%5.3f A, Temp=%4.1f degC")
+    print("RxDoC card status: Voltage=%5.2f V, Current=%5.3f A, Temp=%4.1f degC" % (BFIF.voltage, BFIF.current, BFIF.temp))
 
     BF = bfif_lib.BFHandler(logger=LOGGER)
     BF.point(xdelays=[0] * 16, ydelays=[0] * 16)   # Point at zenith, all delays set to zero
