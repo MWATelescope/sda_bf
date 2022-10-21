@@ -137,6 +137,7 @@ def shutdown():
     print('Shut down.')
 
 
+# noinspection PyUnusedLocal
 def SignalHandler(signum=None, frame=None):
     """Called when a signal is received thay would result in the programme exit, if the
        RegisterCleanup() function has been previously called to set the signal handlers and
