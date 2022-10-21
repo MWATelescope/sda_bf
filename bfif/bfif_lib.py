@@ -93,7 +93,7 @@ class BFIFHandler(object):
         self.logger = logger
         self.lock = threading.RLock()  # Used to control access to the hardware resources (i2C, GPIO) on the BFIF board
         with self.lock:
-            self.logger.debug('BFIF - Initialising BFIFHandler()')
+            self.logger.debug('BFIFHandler - Initialising BFIFHandler()')
             self.bus = smbus.SMBus(1)  # Initialise the i2c bus on the Raspberry Pi.
             self.current = 0.0
             self.voltage = 0.0
@@ -111,7 +111,7 @@ class BFIFHandler(object):
             try:
                 self.bus.write_i2c_block_data(ADDRESS7_DS75, 1, [96])  # Set 12 bit temperature resolution
             except:
-                logger.warning('BFIF - could not set 12-bit resolution temperature measurement mode')
+                logger.warning('BFIFHandler - could not set 12-bit resolution temperature measurement mode')
             time.sleep(0.1)
 
             # Set up initial hardware state on boot:
@@ -152,10 +152,10 @@ class BFIFHandler(object):
          :return: boolean, True for success, False for failure
         """
         if not self.docpower:
-            self.logger.error("BFIF - must turn on power to the doc before enabling it")
+            self.logger.error("BFIFHandler - must turn on power to the doc before enabling it")
             return None
         with self.lock:
-            self.logger.debug('BFIF - Turning ON 48V to beamformer')
+            self.logger.debug('BFIFHandler - Turning ON 48V to beamformer')
             GPIO.output(BFPOWER, 1)
             self.bfpower = bool(GPIO.input(BFPOWER))
         return self.bfpower is True
@@ -169,7 +169,7 @@ class BFIFHandler(object):
           :return: boolean, True for success, False for failure
         """
         with self.lock:
-            self.logger.debug('BFIF - Turning OFF 48V to beamformer')
+            self.logger.debug('BFIFHandler - Turning OFF 48V to beamformer')
             GPIO.output(BFPOWER, 0)
             self.bfpower = bool(GPIO.input(BFPOWER))
         return self.bfpower is False
@@ -187,7 +187,7 @@ class BFIFHandler(object):
             if self.bfpower:
                 self.turnoff_bf()  # If the DoC card is enabled, disable it BEFORE turning the power on.
                 time.sleep(0.1)
-            self.logger.debug('BFIF - Turning ON 48V to DoC card')
+            self.logger.debug('BFIFHandler - Turning ON 48V to DoC card')
             GPIO.output(DOCPOWER, 1)
             self.docpower = bool(GPIO.input(DOCPOWER))
         return self.docpower is True
@@ -205,7 +205,7 @@ class BFIFHandler(object):
             if self.bfpower:
                 self.turnoff_bf()
                 time.sleep(0.1)
-            self.logger.debug('BFIF - Turning OFF 48V to DoC card')
+            self.logger.debug('BFIFHandler - Turning OFF 48V to DoC card')
             GPIO.output(DOCPOWER, 0)
             self.docpower = bool(GPIO.input(DOCPOWER))
         return self.docpower is False
@@ -221,7 +221,7 @@ class BFIFHandler(object):
           :return: boolean, True for success, False for failure
         """
         with self.lock:
-            self.logger.debug('BFIF - Turning ON power to fibre/copper media converter')
+            self.logger.debug('BFIFHandler - Turning ON power to fibre/copper media converter')
             GPIO.output(AUXOFF, 0)
             self.auxpower = not bool(GPIO.input(AUXOFF))
         return self.auxpower is True
@@ -236,7 +236,7 @@ class BFIFHandler(object):
           :return: boolean, True for success, False for failure
         """
         with self.lock:
-            self.logger.debug('BFIF - Turning OFF power to fibre/copper media converter')
+            self.logger.debug('BFIFHandler - Turning OFF power to fibre/copper media converter')
             GPIO.output(AUXOFF, 1)
             self.auxpower = not bool(GPIO.input(AUXOFF))
         return self.auxpower is False
@@ -250,7 +250,7 @@ class BFIFHandler(object):
           :return: boolean, True for success, False for failure
         """
         with self.lock:
-            self.logger.debug('BFIF - Turning ON power to RFoF modules')
+            self.logger.debug('BFIFHandler - Turning ON power to RFoF modules')
             GPIO.output(RFOFOFF, 0)
             self.rfof = not bool(GPIO.input(RFOFOFF))
         return self.rfof is True
@@ -264,7 +264,7 @@ class BFIFHandler(object):
           :return: boolean, True for success, False for failure
         """
         with self.lock:
-            self.logger.debug('BFIF - Turning OFF power to RFoF modules')
+            self.logger.debug('BFIFHandler - Turning OFF power to RFoF modules')
             GPIO.output(RFOFOFF, 1)
             self.rfof = not bool(GPIO.input(RFOFOFF))
         return self.rfof is False
@@ -279,7 +279,7 @@ class BFIFHandler(object):
           :return: boolean, True for success, False for failure
         """
         with self.lock:
-            self.logger.debug('BFIF - Turning ON power to serial chip')
+            self.logger.debug('BFIFHandler - Turning ON power to serial chip')
             GPIO.output(SERENABLE, 1)
             self.serialpower = bool(GPIO.input(SERENABLE))
         return self.serialpower is True
@@ -294,7 +294,7 @@ class BFIFHandler(object):
           :return: boolean, True for success, False for failure
         """
         with self.lock:
-            self.logger.debug('BFIF - Turning OFF power to serial chip')
+            self.logger.debug('BFIFHandler - Turning OFF power to serial chip')
             GPIO.output(SERENABLE, 0)
             self.serialpower = bool(GPIO.input(SERENABLE))
         return self.serialpower is False
@@ -308,7 +308,7 @@ class BFIFHandler(object):
           :return: boolean, True for success, False for failure
         """
         with self.lock:
-            self.logger.debug('BFIF - Set serial mode to RS232')
+            self.logger.debug('BFIFHandler - Set serial mode to RS232')
             GPIO.output(SERIALMODE, 0)
             self.serialmode = 'RS232'
         return not bool(GPIO.input(SERIALMODE))
@@ -322,7 +322,7 @@ class BFIFHandler(object):
           :return: boolean, True for success, False for failure
         """
         with self.lock:
-            self.logger.debug('BFIF - Set serial mode to RS485')
+            self.logger.debug('BFIFHandler - Set serial mode to RS485')
             GPIO.output(SERIALMODE, 1)
             self.serialmode = 'RS485'
         return bool(GPIO.input(SERIALMODE))
@@ -348,7 +348,7 @@ class BFIFHandler(object):
                             data[1] / 16)) * 20e-6 / 0.02  # 20uV per ADU, through a 0.02 Ohm shunt
                 self.voltage = ((data[2] * 16) + (data[3] / 16)) * 0.025  # 25mV per ADU
             except IOError:
-                self.logger.error("BFIF - Can't read LTC4151 sensor on BFIF board")
+                self.logger.error("BFIFHandler - Can't read LTC4151 sensor on BFIF board")
                 ok = False
                 self.current = -999.0
                 self.voltage = -999.0
@@ -358,7 +358,7 @@ class BFIFHandler(object):
                 data = self.bus.read_i2c_block_data(0x48, 0, 2)
                 self.temp = data[0] + data[1] / 256.0
             except IOError:
-                self.logger.error("BFIF - Can't read DS75 sensor on BFIF board")
+                self.logger.error("BFIFHandler - Can't read DS75 sensor on BFIF board")
                 ok = False
                 self.temp = -999.0
         return ok
@@ -460,16 +460,16 @@ class BFIFHandler(object):
             :return: None
         """
         with self.lock:
-            self.logger.critical('BFIF - Taking BFIF and BF to low-power mode - turning off Beamformer, DoC, and RFoF modules')
+            self.logger.critical('BFIFHandler - turning off Beamformer, DoC')
             ok1 = self.turnoff_bf()
             if not ok1:
-                self.logger.error('BFIF - Error turning off beamformer to go to standby mode')
+                self.logger.error('BFIFHandler - Error turning off beamformer')
             ok2 = self.turnoff_doc()
             if not ok2:
-                self.logger.error('BFIF - Error turning off DoC card to go to standby mode')
+                self.logger.error('BFIFHandler - Error turning off DoC card')
             ok3 = self.turnoff_rfof()
             if not ok3:
-                self.logger.error('BFIF - Error turning off RFoF to go to standby mode')
+                self.logger.error('BFIFHandler - Error turning off RFoF power')
 
     def __repr__(self):
         """
@@ -487,12 +487,12 @@ class BFIFHandler(object):
                   BDICT[self.serialpower],
                   self.serialmode,
                   self.opmode)
-        outs = "BFIF: Flags: docpower=%3s, bfpower=%3s, RFoF=%3s, Aux=%3s, SerialPower=%3s, SerialMode=%s, OpMode=%s\n" % params
+        outs = "BFIFHandler: Flags: docpower=%3s, bfpower=%3s, RFoF=%3s, Aux=%3s, SerialPower=%3s, SerialMode=%s, OpMode=%s\n" % params
 
         params = (self.voltage,
                   self.current * 1000,
                   self.temp)
-        outs += "BFIF: Values: voltage=%5.2f V, current=%4.0f mA, temp=%4.1f C\n" % params
+        outs += "BFIFHandler: Values: voltage=%5.2f V, current=%4.0f mA, temp=%4.1f C\n" % params
 
         return outs
 
@@ -520,7 +520,7 @@ class BFHandler(object):
 
     def __init__(self, logger=logging):
         self.logger = logger
-        logger.debug('BF - Initialising BFHandler()')
+        logger.debug('BFHandler - Initialising BFHandler()')
         self.lock = threading.RLock()
         self.temp = 0.0  # Beamformer temperature, read each time a pointing command is sent.
         self.flags = 999  # Flag value returned by the last pointing command. Should contain 128 if there were no comms errors.
@@ -549,10 +549,10 @@ class BFHandler(object):
           :return human-readable string describing the current state
         """
         lastp, xdelays, ydelays = self.last_pointing
-        return "BF: Last pointing at '%s', temp=%4.1f, flags=%d to xdelays=%s\n" % (time.ctime(lastp),
-                                                                                    self.temp,
-                                                                                    self.flags,
-                                                                                    xdelays)
+        return "BFHandler: Last pointing at '%s', temp=%4.1f, flags=%d to xdelays=%s\n" % (time.ctime(lastp),
+                                                                                           self.temp,
+                                                                                           self.flags,
+                                                                                           xdelays)
 
     def __str__(self):
         return self.__repr__()
@@ -590,13 +590,13 @@ class BFHandler(object):
         """
         if ((type(xdelays) != list) or (type(ydelays) != list) or
                 (len(xdelays) != 16) or (len(ydelays) != 16)):
-            self.logger.error('BF - must pass a list of 16 integers in xdelays and ydelays')
+            self.logger.error('BFHandler - must pass a list of 16 integers in xdelays and ydelays')
             return None
         outlist = ['0' * 8, '1' * 4, '0' * 20]  # Header bits in packet, before delay values.
         dwords = []
         for val in (xdelays + ydelays):
             if (type(val) != int) or (val < 0) or (val > 63):
-                self.logger.error('BF - delay values must be integers.')
+                self.logger.error('BFHandler - delay values must be integers.')
                 return None  # Each delay value must be an integer, and must fit in 6 bits.
             else:
                 dwords.append('{0:06b}'.format(val))
@@ -676,10 +676,10 @@ class BFHandler(object):
             self.last_pointing = (time.time(), xdelays, ydelays)
             result = self._send_bitstring(outstring=outstring)
             temp, flags = result
-            self.logger.info('BF - Beamformer sent new pointing. Flags=%d, temp=%4.1f' % (flags, temp))
+            self.logger.info('BFHandler - Beamformer sent new pointing. Flags=%d, temp=%4.1f' % (flags, temp))
             return result
         else:
-            self.logger.warning('BF - Beamformer in low-power mode, cannot send new pointing')
+            self.logger.warning('BFHandler - Beamformer in low-power mode, cannot send new pointing')
             return -999, 999
 
     def test_bf(self):
