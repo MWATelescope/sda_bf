@@ -2,6 +2,8 @@
 
 """
 Script to exercise and test all dipoles and/or delay lines in an MWA beamformer.
+
+Written by Andrew Williams (Andrew.Williams@curtin.edu.au)
 """
 
 import argparse

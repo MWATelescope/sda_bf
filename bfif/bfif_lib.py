@@ -1,7 +1,10 @@
 
 
 """
-Code to manage a single MWA beamformer, connected to a BFIF board.
+Code to manage a single MWA BFIF board, and the beamformer connected to it.
+
+Written by Andrew Williams (Andrew.Williams@curtin.edu.au)
+
 """
 
 import logging

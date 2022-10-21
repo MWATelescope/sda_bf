@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 
 """
-Script to exercise and test all dipoles and/or delay lines in an MWA beamformer.
+Script to point a single tile at a given azimuth and elevation.
+
+Written by Andrew Williams (Andrew.Williams@curtin.edu.au)
+
 """
 
 import argparse
