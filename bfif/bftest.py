@@ -51,7 +51,7 @@ NTESTS, NFAILED = 0, 0  # Number of total pointings in the current mode, and num
 SIGNAL_HANDLERS = {}
 CLEANUP_FUNCTION = None
 
-DESCRIPTION = """"Tests one dipole (A-P) at a time with zero delay, or one delay line 
+DESCRIPTION = """Tests one dipole (A-P) at a time with zero delay, or one delay line 
 setting (0-6) at a time with all dipoles selected. By default each test is run once, 
 waiting for a keypress each time, after which the program exits and the beamformer is
 turned off.
@@ -170,18 +170,19 @@ def RegisterCleanup(func):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description=DESCRIPTION)
+    parser = argparse.ArgumentParser(description=DESCRIPTION,
+                                     formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--maxloops", "-m",
                         dest='maxloops',
                         default=1,
                         type=int,
-                        help="Number of times to loop over all delays/dipoles for the mode/s specified, before exiting. To loop forever, specify 0.")
+                        help="Number of times to loop over all tests specified. To loop forever, specify 0. (default: 1)")
     parser.add_argument("--delaytime", "-d",
                         dest='delaytime',
                         default=0.0,
                         type=float,
-                        help="Delay time between modes, 0 to wait for a keypress")
-    parser.add_argument('modes', nargs='+', help="One or more test modes. Either 'dipole[[A-P][A-P]...' or 'delay[[0-6][0-6]...'")
+                        help="Delay time between modes, 0 to wait for a keypress. (default 0)")
+    parser.add_argument('modes', nargs='+', help="Zero or more test modes. Either 'dipole[[A-P][A-P]...' or 'delay[[0-6][0-6]...'")
     args = parser.parse_args()
 
     bfif_lib.setup_gpio()  # Need to call this before using the library
