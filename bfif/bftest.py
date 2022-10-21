@@ -51,6 +51,21 @@ NTESTS, NFAILED = 0, 0  # Number of total pointings in the current mode, and num
 SIGNAL_HANDLERS = {}
 CLEANUP_FUNCTION = None
 
+DESCRIPTION = """"Tests one dipole (A-P) at a time with zero delay, or one delay line 
+setting (0-6) at a time with all dipoles selected. By default each test is run once, 
+waiting for a keypress each time, after which the program exits and the beamformer is
+turned off.
+
+Tests are specified as one or more mode strings on the command line. Each mode string is
+either the word 'dipole' (optionally followed, with no spaces, by one or more dipole letters,
+in any order), or the word 'delay' (optionally followed, with no spaces, by one or more
+delay line specifiers, in any order). If no mode string is given, the default ('dipole')
+will be used.
+
+For example, 'dipole' will test all dipoles, 'dipoleBCD' will just test dipoles B, C, and D,
+'delay' will test all delays, 'delay024' will test only delays 0, 2 and 4.
+"""
+
 
 def mainloop(modes=None, maxloops=1, delaytime=0.0):
     global NTESTS, NFAILED
@@ -155,7 +170,7 @@ def RegisterCleanup(func):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description=DESCRIPTION)
     parser.add_argument("--maxloops", "-m",
                         dest='maxloops',
                         default=1,
@@ -166,7 +181,7 @@ if __name__ == '__main__':
                         default=0.0,
                         type=float,
                         help="Delay time between modes, 0 to wait for a keypress")
-    parser.add_argument('modes', nargs='+', help="One or more test modes")
+    parser.add_argument('modes', nargs='+', help="One or more test modes. Either 'dipole[[A-P][A-P]...' or 'delay[[0-6][0-6]...'")
     args = parser.parse_args()
 
     bfif_lib.setup_gpio()  # Need to call this before using the library
@@ -182,7 +197,6 @@ if __name__ == '__main__':
     print("RxDoC card status: Voltage=%5.2f V, Current=%5.3f A, Temp=%4.1f degC" % (BFIF.voltage, BFIF.current, BFIF.temp))
 
     BF = bfif_lib.BFHandler(logger=LOGGER)
-    BF.point(xdelays=[0] * 16, ydelays=[0] * 16)   # Point at zenith, all delays set to zero
 
     if args.modes:
         modes = [x.upper().strip() for x in args.modes]
