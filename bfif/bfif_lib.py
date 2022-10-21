@@ -676,7 +676,7 @@ class BFHandler(object):
             self.last_pointing = (time.time(), xdelays, ydelays)
             result = self._send_bitstring(outstring=outstring)
             temp, flags = result
-            self.logger.info('BFHandler - Beamformer sent new pointing. Flags=%d, temp=%4.1f' % (flags, temp))
+            self.logger.debug('BFHandler - Beamformer sent new pointing. Flags=%d, temp=%4.1f' % (flags, temp))
             return result
         else:
             self.logger.warning('BFHandler - Beamformer in low-power mode, cannot send new pointing')

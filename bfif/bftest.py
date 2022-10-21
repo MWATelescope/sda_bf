@@ -51,19 +51,21 @@ NTESTS, NFAILED = 0, 0  # Number of total pointings in the current mode, and num
 SIGNAL_HANDLERS = {}
 CLEANUP_FUNCTION = None
 
-DESCRIPTION = """Tests one dipole (A-P) at a time with zero delay, or one delay line 
-setting (0-6) at a time with all dipoles selected. By default each test is run once, 
-waiting for a keypress each time, after which the program exits and the beamformer is
-turned off.
+DESCRIPTION = """Tests one dipole (A-P) at a time with zero delay, or one delay line
+setting (0-6) at a time with all dipoles selected. By default each test is 
+run once, waiting for a keypress each time, after which the program exits 
+and the beamformer is turned off.
 
-Tests are specified as one or more mode strings on the command line. Each mode string is
-either the word 'dipole' (optionally followed, with no spaces, by one or more dipole letters,
-in any order), or the word 'delay' (optionally followed, with no spaces, by one or more
-delay line specifiers, in any order). If no mode string is given, the default ('dipole')
-will be used.
+Tests are specified as one or more mode strings on the command line. Each 
+mode string is either the word 'dipole' (optionally followed, with no spaces,
+by one or more dipole letters, in any order), or the word 'delay' (optionally
+followed, with no spaces, by one or more delay line specifiers, in any order).
+ 
+If no mode string is given, the default ('dipole') will be used.
 
-For example, 'dipole' will test all dipoles, 'dipoleBCD' will just test dipoles B, C, and D,
-'delay' will test all delays, 'delay024' will test only delays 0, 2 and 4.
+For example, 'dipole' will test all dipoles, 'dipoleBCD' will just test 
+dipoles B, C, and D, 'delay' will test all delays, and 'delay024' will only
+test delays 0, 2 and 4.
 """
 
 
