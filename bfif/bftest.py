@@ -169,6 +169,8 @@ if __name__ == '__main__':
     parser.add_argument('modes', nargs='+', help="One or more test modes")
     args = parser.parse_args()
 
+    bfif_lib.setup_gpio()  # Need to call this before using the library
+
     BFIF = bfif_lib.BFIFHandler(logger=LOGGER)
     # Turn on the beamformer
     BFIF.turnon_doc()
