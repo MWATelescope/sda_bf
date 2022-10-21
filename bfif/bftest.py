@@ -130,12 +130,11 @@ def mainloop(modes=None, maxloops=1, delaytime=0.0):
 
 def shutdown():
     print('Total of %d tests, of which %04d were bad' % (NTESTS, NFAILED))
-    print('Shutting down')
-    time.sleep(0.5)
+    print('Shutting down, turning off RxDoC card and beamformer.')
     if BFIF is not None:
         BFIF.cleanup()
     bfif_lib.cleanup_gpio()
-    print('Shut down')
+    print('Shut down.')
 
 
 def SignalHandler(signum=None, frame=None):

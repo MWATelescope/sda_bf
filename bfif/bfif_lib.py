@@ -460,7 +460,7 @@ class BFIFHandler(object):
             :return: None
         """
         with self.lock:
-            self.logger.critical('BFIFHandler - turning off Beamformer, DoC')
+            self.logger.info('BFIFHandler - turning off Beamformer, DoC')
             ok1 = self.turnoff_bf()
             if not ok1:
                 self.logger.error('BFIFHandler - Error turning off beamformer')
