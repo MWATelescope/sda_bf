@@ -155,7 +155,7 @@ def RegisterCleanup(func):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(usage="usage: %prog [options]")
+    parser = argparse.ArgumentParser()
     parser.add_argument("--maxloops", "-m",
                         dest='maxloops',
                         default=1,
