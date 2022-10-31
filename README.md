@@ -21,5 +21,23 @@ power to all eight RxDoC cards, and monitors currents and voltages. The
 other Raspberry Pi sends pointing commands as needed, to all eight
 tiles via the RxDoC cards.
 
+The beamformer has two F connectors for coax cable. Both deliver 48V DC to 
+power the beamformer and dipole LNA's. The beamformer transmits its summed 
+RF out over the X and Y, coax cables, and also uses the centre conductors on 
+the X and Y coax to send delay values to the beamformer, and to get flags and 
+an 12-bit temperature value back. 
+
+This communication uses three GPIO pins on a Raspberry Pi - TXDATA, RXDATA, 
+and TXCLOCK. To send a new delay configuration, the clock line (on one coax) 
+is pulsed 253 times, and on each rising edge, the value of the TXDATA pin (on 
+the other coax) is latched. After those 253 bits are transmitted, the clock
+is pulsed another 24 times, and each time, the RXDATA pin is read, to get
+8 bits of flags, and a 16-bit number containing a 12-but temperature value.
+
+Two more GPIO pins are used to control the RxDoC card - DOCPOWER is used to control
+FETs on the main PCB, to turn on and off the 5V and 48V power to the RxDoC card,
+and BFPOWER is sent to the RxDoC card to turn on and off 48V power over the coax
+out to the beamformer.
+
 For more information, contact Andrew Williams 
 (Andrew.Williams@curtin.edu.au)
