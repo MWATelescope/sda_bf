@@ -39,5 +39,15 @@ FETs on the main PCB, to turn on and off the 5V and 48V power to the RxDoC card,
 and BFPOWER is sent to the RxDoC card to turn on and off 48V power over the coax
 out to the beamformer.
 
+The delay values are in units of 435 picoseconds, and legal delay values range
+from 0-63. Values from 0-31 are used for pointing the beamformer, and a value
+of 32 turns off the dipole at the summing junction (useful if the LNA is bad).
+That means that any delay greater than 31 has the dipole turned off at the 
+summing junction in the beamformer, so the lower bit values are irrelevant.
+
+The conversion from azimuth and elevation to delay values (0-31) is done in
+tile_geometry.py, and the conversion from delay values to the 253-bit value
+sent to the beamformer is in bfif_lib/BFHandler._gen_bitstring().
+
 For more information, contact Andrew Williams 
 (Andrew.Williams@curtin.edu.au)
