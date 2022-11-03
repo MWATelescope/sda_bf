@@ -16,7 +16,8 @@ import time
 logging.basicConfig(level=logging.INFO)
 LOGGER = logging.getLogger('bftest')
 
-import bfif_lib
+import bfif
+from mwabf import beamformer
 
 
 ALLDELAYS = {'Z':('Zen', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
@@ -135,7 +136,7 @@ def shutdown():
     print('Shutting down, turning off RxDoC card and beamformer.')
     if BFIF is not None:
         BFIF.cleanup()
-    bfif_lib.cleanup_gpio()
+    bfif.cleanup_gpio()
     print('Shut down.')
 
 
@@ -189,19 +190,22 @@ if __name__ == '__main__':
     parser.add_argument('modes', nargs='+', help="Zero or more test modes. Either 'dipole[[A-P][A-P]...' or 'delay[[0-6][0-6]...'")
     args = parser.parse_args()
 
-    bfif_lib.setup_gpio()  # Need to call this before using the library
+    bfif.setup_gpio()  # Need to call this before using the library
 
-    BFIF = bfif_lib.BFIFHandler(logger=LOGGER)
+    BFIF = bfif.BFIFHandler(logger=LOGGER)
     # Turn on the beamformer
     BFIF.turnon_doc()
     time.sleep(0.5)
-    BFIF.turnon_bf()
+    BFIF.enable_bf()
     time.sleep(2)
 
     BFIF.check()
     print("RxDoC card status: Voltage=%5.2f V, Current=%5.3f A, Temp=%4.1f degC" % (BFIF.voltage, BFIF.current, BFIF.temp))
 
-    BF = bfif_lib.BFHandler(logger=LOGGER)
+    BF = beamformer.BFHandler(txdata=bfif.TXDATA,
+                              rxdata=bfif.RXDATA,
+                              txclock=bfif.TXCLOCK,
+                              logger=LOGGER)
 
     if args.modes:
         modes = [x.upper().strip() for x in args.modes]
