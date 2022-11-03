@@ -48,8 +48,10 @@ class MWALogFormatter(logging.Formatter):
 
 mwalf = MWALogFormatter()
 
-logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
+LOGGER = logging.getLogger()
+LOGGER.setLevel(logging.DEBUG)
+LOGGER.handlers = []
+LOGGER.propagate = False
 
 fh = logging.FileHandler(LOGFILE)
 fh.setLevel(LOGLEVEL_LOGFILE)
@@ -64,8 +66,8 @@ ch.setFormatter(mwalf)
 # rh.setFormatter(mwalf)
 
 # add the handlers to the logger
-logger.addHandler(fh)
-logger.addHandler(ch)
+LOGGER.addHandler(fh)
+LOGGER.addHandler(ch)
 # logger.addHandler(rh)
 
 STATUS = None
@@ -94,7 +96,7 @@ class RxDoC(object):
     """
     Class to monitor and control a single RxDoC card
     """
-    def __init__(self, bfnum, enable_pin, power_pin, i2c_address, bus, logger=logger):
+    def __init__(self, bfnum, enable_pin, power_pin, i2c_address, bus, logger=LOGGER):
         """
         Create an instance of an RxDoC controller.
 
@@ -359,9 +361,9 @@ def cleanup():
 
     :return: None
     """
-    logger.info("Turning off all eight beamformers, and 48V supplies")
+    LOGGER.info("Turning off all eight beamformers, and 48V supplies")
     BFCON.turnoff_all()
-    logger.info("Cleaning up GPIO library")
+    LOGGER.info("Cleaning up GPIO library")
     GPIO.cleanup()
 
 
@@ -414,10 +416,10 @@ if __name__ == '__main__':
     BFCON = BFController()
     RegisterCleanup(cleanup)
 
-    logger.info("Turning on 48V supplies and all eight beamformers")
+    LOGGER.info("Turning on 48V supplies and all eight beamformers")
     BFCON.turnon_all()
 
     while True:
         BFCON.check()
-        logger.info(str(BFCON))
+        LOGGER.info(str(BFCON))
         time.sleep(10)

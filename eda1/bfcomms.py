@@ -41,6 +41,8 @@ mwalf = MWALogFormatter()
 
 LOGGER = logging.getLogger()
 LOGGER.setLevel(logging.DEBUG)
+LOGGER.handlers = []
+LOGGER.propagate = False
 
 fh = handlers.RotatingFileHandler(LOGFILE,
                                   maxBytes=1000000000,
