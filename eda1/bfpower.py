@@ -310,9 +310,9 @@ class BFController(object):
         powerok = True
         enabled_ok = True
         for bf in self.bfs.values():
-            powerok &= bf.turnon_doc()
+            powerok &= bool(bf.turnon_doc())
             time.sleep(0.1)
-            enabled_ok &= bf.enable_bf()
+            enabled_ok &= bool(bf.enable_bf())
         GPIO.output(DIGOUT1, powerok)
         GPIO.output(DIGOUT2, enabled_ok)
 
@@ -325,9 +325,9 @@ class BFController(object):
         powerok = True
         enabled_ok = True
         for bf in self.bfs.values():
-            enabled_ok &= bf.disable_bf()
+            enabled_ok &= bool(bf.disable_bf())
             time.sleep(0.1)
-            powerok &= bf.turnoff_doc()
+            powerok &= bool(bf.turnoff_doc())
         self.turn_off_48()
         GPIO.output(DIGOUT1, not powerok)
         GPIO.output(DIGOUT2, not enabled_ok)
