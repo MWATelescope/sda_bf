@@ -141,7 +141,7 @@ if __name__ == '__main__':
 
     for slot in range(1, 9):
         txd, txc, rxd = IOPINS[slot]
-        BFS[slot] = beamformer.BFHandler(txdata=txc, rxdata=rxd, txclock=txc, logger=LOGGER)
+        BFS[slot] = beamformer.BFHandler(txdata=txd, txclock=txc, rxdata=rxd, logger=LOGGER)
 
     # All zero delays - point at the zenith
     xdelays = [0] * 16
