@@ -33,7 +33,7 @@ import smbus
 
 # set up the logging
 
-LOGLEVEL_CONSOLE = logging.DEBUG  # Logging level for console messages (INFO, DEBUG, ERROR, CRITICAL, etc)
+LOGLEVEL_CONSOLE = logging.INFO  # Logging level for console messages (INFO, DEBUG, ERROR, CRITICAL, etc)
 LOGLEVEL_LOGFILE = logging.DEBUG  # Logging level for logfile
 LOGLEVEL_REMOTE = logging.INFO
 LOGFILE = "/tmp/bfpower.log"
