@@ -96,7 +96,7 @@ CLEANUP_FUNCTION = None
 
 def identify_hardware():
     """
-    Return 'POWER', 'COMMS', or None
+    Return 'POWER' or 'COMMS'
     :return:
     """
     try:
@@ -107,6 +107,8 @@ def identify_hardware():
         _ = bus.read_i2c_block_data(TEST_I2C_ADDRESS, 0, 4)
     except:
         return 'COMMS'
+    finally:
+        bus.close()
     return 'POWER'
 
 
@@ -429,6 +431,10 @@ def RegisterCleanup(func):
 
 
 if __name__ == '__main__':
+    if identify_hardware() != 'POWER':
+        LOGGER.critical("I2C device not found - Can't run bfpower.py on a communication Pi.")
+        sys.exit(-1)
+
     init()  # Set up GPIO pins
 
     BFCON = BFController()

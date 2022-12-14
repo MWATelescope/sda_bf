@@ -21,6 +21,8 @@ import time
 
 # noinspection PyUnresolvedReferences
 import RPi.GPIO as GPIO
+# noinspection PyUnresolvedReferences
+import smbus
 
 from mwabf import beamformer
 
@@ -63,10 +65,30 @@ LOGGER.addHandler(ch)
 IOPINS = {1:(29, 16, 40), 2:(26, 15, 38), 3:(24, 13, 37), 4:(23, 12, 36), 5:(22, 11, 35), 6:(21, 10, 33), 7:(19, 8, 32),
           8:(18, 7, 31)}
 
+TEST_I2C_ADDRESS = 0x68   # Used on startup, to see if we are running on a power or comms Pi.
+
 BFS = {}   # Dict with bfnum (1-8) as key, and mwabf.beamformer.BFHandler as values
 
 SIGNAL_HANDLERS = {}
 CLEANUP_FUNCTION = None
+
+
+def identify_hardware():
+    """
+    Return 'POWER' or 'COMMS'
+    :return:
+    """
+    try:
+        bus = smbus.SMBus(1)
+    except:
+        return 'COMMS'
+    try:
+        _ = bus.read_i2c_block_data(TEST_I2C_ADDRESS, 0, 4)
+    except:
+        return 'COMMS'
+    finally:
+        bus.close()
+    return 'POWER'
 
 
 def init():
@@ -135,7 +157,9 @@ def RegisterCleanup(func):
 
 
 if __name__ == '__main__':
-
+    if identify_hardware() != 'COMMS':
+        LOGGER.critical("I2C device found - Can't run bfcomms.py on a power control Pi.")
+        sys.exit(-1)
     init()
     RegisterCleanup(cleanup)
 
