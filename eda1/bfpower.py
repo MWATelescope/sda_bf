@@ -79,6 +79,8 @@ BFIOPINS = {1:(29, 16), 2:(26, 15), 3:(24, 13), 4:(23, 12), 5:(22, 11), 6:(21, 1
 # corresponding to D0,D2,D4,...DE when the r/w bit is appended as bit 0 of the address.
 ADDRESSES = {1:0x68, 2:0x69, 3:0x6a, 4:0x6b, 5:0x6c, 6:0x6d, 7:0x6e, 8:0x6f}
 
+TEST_I2C_ADDRESS = 0x68   # Used on startup, to see if we are running on a power or comms Pi.
+
 POWER48 = 32
 ALARMPOWER = 36
 ALARM48 = 38
@@ -90,6 +92,22 @@ BDICT = {False:'OFF', True:'ON'}
 
 SIGNAL_HANDLERS = {}
 CLEANUP_FUNCTION = None
+
+
+def identify_hardware():
+    """
+    Return 'POWER', 'COMMS', or None
+    :return:
+    """
+    try:
+        bus = smbus.SMBus(1)
+    except:
+        return 'COMMS'
+    try:
+        _ = bus.read_i2c_block_data(TEST_I2C_ADDRESS, 0, 4)
+    except:
+        return 'COMMS'
+    return 'POWER'
 
 
 class RxDoC(object):
